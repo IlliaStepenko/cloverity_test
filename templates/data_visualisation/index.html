@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'data_visualization/css/style.css' %}">
+
+{% endblock %}
+{% block head_js %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="center">
+        <header class="site-header">
+            <div class="site-logo">
+                <img src="{% static 'data_visualization/img/logo.png' %}" alt="Logo">
+            </div>
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            {% endif %}
+        </header>
+
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h3>Regions</h3>
+                <div id="regionList"></div>
+                <button id="toggleAll" class="collapse-btn">Hide all</button>
+            </aside>
+
+            <section class="charts-container">
+                <div class="charts-grid" id="chartsGrid"></div>
+            </section>
+        </div>
+    </div>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Деталі</h2>
+                <button class="close-modal" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-chart-wrapper">
+                    <canvas id="modalChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ data|json_script:"chart-data" }}
+    <script src="{% static 'data_visualization/js/dashboard.js' %}"></script>
+    
+{% endblock %}

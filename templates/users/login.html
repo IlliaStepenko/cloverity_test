@@ -1,0 +1,33 @@
+{% extends 'users/base_users.html' %}
+{% block meta %}
+    <title>Login</title>
+{% endblock %}
+{% block content %}
+    <div class="center">
+
+        <form method="post" class="card" novalidate>
+            {% csrf_token %}
+            <h2 class="text-center">Log in to your account</h2>
+            {% for field in form %}
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <small>{{ field.errors|striptags }}</small>
+                {% endif %}
+            {% endfor %}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <input type="submit" value="Login" class="btn btn-primary full-width">
+            <hr>
+            <p class="text-center">Don't have an account? <a href="{% url 'signup' %}">Join Now</a></p>
+        </form>
+    </div>
+{% endblock content %}
